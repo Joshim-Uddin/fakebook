@@ -19,7 +19,7 @@ const Modal = ({showModal, setShowModal}) => {
         const mobileEmail = data.mobileEmail;
         const gender = data.gender;
         const userData = {fullName:fullName, password:password, mobileEmail:mobileEmail, gender:gender, dob:dob};
-        console.log(userData)
+        // console.log(userData)
         fetch('http://localhost:5000/signup', {
             method: 'POST',
             headers: {
