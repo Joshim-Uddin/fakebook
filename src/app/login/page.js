@@ -1,10 +1,13 @@
 'use client'
 import Modal from '@/components/signUpModal';
 import Link from 'next/link';
+import { redirect, useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import Swal from 'sweetalert2';
 
 const Login = () => {
+    const router = useRouter()
     const [showModal, setShowModal] = useState(false)
     const {register, handleSubmit, reset, formState:{errors}} = useForm()
     const handleLogin = (data) => {
@@ -14,7 +17,26 @@ const Login = () => {
             headers: {
                 'content-type': 'application/json',
             }
-        }).then(res=>res.json()).then(data=> console.log(data.message)).catch(err=>console.log(`This is ${err}`))
+        }).then(res=>res.json()).then(data=> {
+            if(data.failed){
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Login Failed',
+                    text: 'Email or Mobile Number and Password not Matched',
+                    timer: 1500,
+                    showConfirmButton: false
+                })
+            }else{
+                Swal.fire({
+                    icon: 'success',
+                    title: `Welcome ${data.fullName}`,
+                    text: 'Login Successfull',
+                    showConfirmButton: false,
+                    timer:2000
+                })
+                 router.push('/home', {scroll: false})
+                       }
+        }).catch(err=>console.log(`This is ${err}`))
     }
     return (
         <div className="relative text-center flex md:px-32 h-screen justify-center items-center gap-14 bg-slate-300">
